@@ -1,0 +1,35 @@
+version: '3'
+services: 
+    web: 
+        build: 
+            dockerfile: Dockerfile
+            context: .
+        container_name: site
+        restart: unless-stopped
+        environment:
+            API_URL: http://localhost/api
+            API_BANCO: database
+        ports:
+            - "80:80"
+        volumes:
+            - ./conf/nginx/nginx.conf:/etc/nginx/
+            - ./arquivos:/arquivos/
+    #MySQL Service
+    db:
+        image: mysql:5.7.22
+        container_name: db
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+           MYSQL_DATABASE: laravel
+           MYSQL_ROOT_PASSWORD: your_mysql_root_password
+           SERVICE_TAGS: dev
+           SERVICE_NAME: mysql
+        volumes:
+          - database:/var/lib/mysql
+          - ./conf/mysql/my.cnf:/etc/mysql/my.cnf
+#Volumes
+volumes:
+    database:
+        driver: local
