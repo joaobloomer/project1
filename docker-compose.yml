@@ -7,13 +7,13 @@ services:
         container_name: site
         restart: unless-stopped
         environment:
-            API_URL: http://localhost/api
+            API_URL: http://localhost:6081/api
             API_BANCO: database
         ports:
-            - "80:80"
+            - "6080:80"
         volumes:
             - ./conf/nginx/nginx.conf:/etc/nginx/
-            - ./arquivos:/arquivos/
+            - ./site/arquivos:/arquivos/
     #MySQL Service
     db:
         image: mysql:5.7.22
@@ -22,13 +22,13 @@ services:
         ports:
             - "3306:3306"
         environment:
-           MYSQL_DATABASE: laravel
-           MYSQL_ROOT_PASSWORD: your_mysql_root_password
+           MYSQL_DATABASE: database
+           MYSQL_ROOT_PASSWORD: senha
            SERVICE_TAGS: dev
            SERVICE_NAME: mysql
         volumes:
-          - database:/var/lib/mysql
-          - ./conf/mysql/my.cnf:/etc/mysql/my.cnf
+          - ./conf/mysql/my.cnf:/etc/mysql/
+          - ./database:/var/lib/mysql
 #Volumes
 volumes:
     database:
